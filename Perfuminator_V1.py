@@ -23,9 +23,9 @@ class PerfumeMaker:
         # Dictionary to hold frames
         self.frames = {}
         self.frames["MainMenu"] = self.create_main_menu()
-        self.frames["MainGame"] = self.create_main_game
-        self.frames["PaletteSelector"] = self.create_palette_selector
-        self.frames["Checkout"] = self.create_checkout
+        self.frames["PaletteSelector"] = self.create_palette_selector()
+        self.frames["MainGame"] = self.create_main_game()
+        self.frames["Checkout"] = self.create_checkout()
 
         # Show the initial frame
         self.show_frame("MainMenu")
@@ -46,7 +46,7 @@ class PerfumeMaker:
         frame = Frame(self.container)
         frame.grid(row=0, column=0, sticky=NSEW)
         
-        for i in range(2):
+        for i in range(3):
             frame.grid_rowconfigure(i, weight=1)
         for j in range(2):
             frame.grid_columnconfigure(j, weight=1)            
@@ -65,14 +65,44 @@ class PerfumeMaker:
 
         return frame
     
+    def create_palette_selector(self):
+        frame = Frame(self.container)
+        frame.grid(row=0, column=0, sticky=NSEW)
+
+        for i in range(6):
+            frame.grid_rowconfigure(i, weight=1)
+        for j in range(1):
+            frame.grid_columnconfigure(j, weight=1)    
+        
+        heading = Label(frame, text="Our Premade Palettes", font="Verdana 16 bold")
+        heading.grid(row=0, column=0, sticky=NSEW)
+
+        summer_palette_button= Button(frame, text="PLACEHOLDER", bg="yellow", font="Verdana 12 bold",command=lambda: ["PLACEHOLDER METHOD(),",self.show_frame("MainGame")])
+        summer_palette_button.grid(row=1, column=0, sticky=NSEW, pady=(10,10))
+
+        PLACEHOLDER_TWO_BUTTON= Button(frame, text="PLACEHOLDER", bg="red", font="Verdana 12 bold",command=lambda: ["PLACEHOLDER METHOD(),",self.show_frame("MainGame")])
+        PLACEHOLDER_TWO_BUTTON.grid(row=2, column=0, sticky=NSEW, pady=(10,10))
+
+        PLACEHOLDER_THREE_BUTTON= Button(frame, text="PLACEHOLDER", bg="green", font="Verdana 12 bold",command=lambda: ["PLACEHOLDER METHOD(),",self.show_frame("MainGame")])
+        PLACEHOLDER_THREE_BUTTON.grid(row=3, column=0, sticky=NSEW, pady=(10,10))
+
+        PLACEHOLDER_FOUR_BUTTON= Button(frame, text="PLACEHOLDER", bg="purple", font="Verdana 12 bold",command=lambda: ["PLACEHOLDER METHOD(),",self.show_frame("MainGame")])
+        PLACEHOLDER_FOUR_BUTTON.grid(row=4, column=0, sticky=NSEW, pady=(10,10))
+
+        back_button= Button(frame, text="BACK", bg="gray", font="Verdana 12 bold",command=lambda: self.show_frame("MainMenu"))
+        back_button.grid(row=5, column=0, sticky=NSEW)
+        return frame
+
     def create_main_game(self):
-        pass
+        frame = Frame(self.container)
+        frame.grid(row=0, column=0, sticky=NSEW)
+        return frame
 
-    def create_palette_selector():
-        pass
 
-    def create_checkout():
-        pass
+    def create_checkout(self):
+        frame = Frame(self.container)
+        frame.grid(row=0, column=0, sticky=NSEW)
+        return frame
 
     
 if __name__ == "__main__":
