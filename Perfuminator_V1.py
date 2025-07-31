@@ -13,6 +13,7 @@ class PerfumeMaker:
         self.root.title("Perfumantor")
         self.root.grid_rowconfigure(0,weight=1)
         self.root.grid_columnconfigure(0,weight=1)
+        self.root.geometry("500x500")
 
         # Container for frames
         self.container = Frame(self.root)
@@ -46,7 +47,7 @@ class PerfumeMaker:
         frame = Frame(self.container)
         frame.grid(row=0, column=0, sticky=NSEW)
         
-        for i in range(3):
+        for i in range(4):
             frame.grid_rowconfigure(i, weight=1)
         for j in range(2):
             frame.grid_columnconfigure(j, weight=1)            
@@ -54,14 +55,17 @@ class PerfumeMaker:
         heading = Label(frame, text="Welcome to the Perfumanator", font="Verdana 16 bold")
         heading.grid(row=0, column=0, columnspan=2, sticky=NSEW)
 
+        # photo_label= Label(image="placeholder.png")
+        # photo_label.grid(row=1, column=0, columnspan=2, sticky=NSEW)
+
         main_menu_text = Label(frame, text="would you like to choose from", font="Verdana 11")
-        main_menu_text.grid(row=1, column=0, columnspan=2, sticky=NSEW, pady=(50, 0))
+        main_menu_text.grid(row=2, column=0, columnspan=2, sticky=NSEW, pady=(50, 0))
 
         free_reign_button = Button(frame, text="Free Reign", bg="lightgreen", font="Verdana 12 bold",command=lambda: self.show_frame("MainGame"))
-        free_reign_button.grid(row=2, column=0, sticky=NSEW)
+        free_reign_button.grid(row=3, column=0, sticky=NSEW)
     
         preset_palette_button= Button(frame, text="Preset Palette", bg="yellow", font="Verdana 12 bold",command=lambda: self.show_frame("PaletteSelector"))
-        preset_palette_button.grid(row=2, column=1, sticky=NSEW)
+        preset_palette_button.grid(row=3, column=1, sticky=NSEW)
 
         return frame
     
@@ -69,7 +73,7 @@ class PerfumeMaker:
         frame = Frame(self.container)
         frame.grid(row=0, column=0, sticky=NSEW)
 
-        for i in range(6):
+        for i in range(5):
             frame.grid_rowconfigure(i, weight=1)
         for j in range(1):
             frame.grid_columnconfigure(j, weight=1)    
@@ -77,20 +81,20 @@ class PerfumeMaker:
         heading = Label(frame, text="Our Premade Palettes", font="Verdana 16 bold")
         heading.grid(row=0, column=0, sticky=NSEW)
 
-        summer_palette_button= Button(frame, text="PLACEHOLDER", bg="yellow", font="Verdana 12 bold",command=lambda: ["PLACEHOLDER METHOD(),",self.show_frame("MainGame")])
-        summer_palette_button.grid(row=1, column=0, sticky=NSEW, pady=(10,10))
+        summer_palette_button= Button(frame, text="Summer Palette (more fruity scents)", bg="yellow", font="Verdana 12 bold",command=lambda: ["PLACEHOLDER METHOD(),",self.show_frame("MainGame")])
+        summer_palette_button.grid(row=1, column=0, sticky=NSEW, pady=(10,10), padx=(20,20))
 
-        PLACEHOLDER_TWO_BUTTON= Button(frame, text="PLACEHOLDER", bg="red", font="Verdana 12 bold",command=lambda: ["PLACEHOLDER METHOD(),",self.show_frame("MainGame")])
-        PLACEHOLDER_TWO_BUTTON.grid(row=2, column=0, sticky=NSEW, pady=(10,10))
+        outdoors_palette_button= Button(frame, text="Outdoors Palette (more woody scents)", bg="forest green", font="Verdana 12 bold",command=lambda: ["PLACEHOLDER METHOD(),",self.show_frame("MainGame")])
+        outdoors_palette_button.grid(row=2, column=0, sticky=NSEW, pady=(10,10), padx=(20,20))
 
-        PLACEHOLDER_THREE_BUTTON= Button(frame, text="PLACEHOLDER", bg="green", font="Verdana 12 bold",command=lambda: ["PLACEHOLDER METHOD(),",self.show_frame("MainGame")])
-        PLACEHOLDER_THREE_BUTTON.grid(row=3, column=0, sticky=NSEW, pady=(10,10))
+        candy_palette_button= Button(frame, text="Candy Palette (more sweet scents)", bg="hot pink", font="Verdana 12 bold",command=lambda: ["PLACEHOLDER METHOD(),",self.show_frame("MainGame")])
+        candy_palette_button.grid(row=3, column=0, sticky=NSEW, pady=(10,10), padx=(20,20))
 
-        PLACEHOLDER_FOUR_BUTTON= Button(frame, text="PLACEHOLDER", bg="purple", font="Verdana 12 bold",command=lambda: ["PLACEHOLDER METHOD(),",self.show_frame("MainGame")])
-        PLACEHOLDER_FOUR_BUTTON.grid(row=4, column=0, sticky=NSEW, pady=(10,10))
+        zesty_palette_button= Button(frame, text="Zesty Palette (more Citrusy scents)", bg="orange", font="Verdana 12 bold",command=lambda: ["PLACEHOLDER METHOD(),",self.show_frame("MainGame")])
+        zesty_palette_button.grid(row=4, column=0, sticky=NSEW, pady=(10,10), padx=(20,20))
 
         back_button= Button(frame, text="BACK", bg="gray", font="Verdana 12 bold",command=lambda: self.show_frame("MainMenu"))
-        back_button.grid(row=5, column=0, sticky=NSEW)
+        back_button.grid(row=5, column=0, sticky=NSEW, pady=(10,10), padx=(20,20))
         return frame
 
     def create_main_game(self):
@@ -103,6 +107,9 @@ class PerfumeMaker:
         frame = Frame(self.container)
         frame.grid(row=0, column=0, sticky=NSEW)
         return frame
+    
+    def save_palette_type(self):
+        return 
 
     
 if __name__ == "__main__":
