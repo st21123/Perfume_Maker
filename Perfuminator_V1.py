@@ -115,3 +115,55 @@ class PerfumeMaker:
 if __name__ == "__main__":
     app = PerfumeMaker()
     app.run()
+
+class MainGame(Frame):
+    def __init__(self, root, scent_palette):
+        super().__init__(root)
+        self.scent_palette = scent_palette
+        self.attributes = ["fruity", "sweet", "citrus", "woody"]
+
+        for i in range(3):
+            self.selected_scent_vars = [StringVar(value="")]
+
+        self.grid_columnconfigure(0, weight=4)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+
+        #frame to hold canvas widget to create scrollbar and then frame inside canvas for the notes  ###ugly comment change it later when putting proper comments in
+        scents_container = Frame(self)
+        scents_container.grid(row=0, column=0, rowspan=3, sticky="NSEW", padx=10, pady=10)
+
+        canvas = Canvas(scents_container)
+        vertical_scrollbar = Scrollbar(scents_container, orient="vertical", command=canvas.yview)
+
+        self.scents_grid_frame = Frame(canvas)
+
+        canvas.create_window((0, 0), window=self.scents_grid_frame, anchor="NW") #keeps top left
+        canvas.configure(yscrollcommand=vertical_scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        vertical_scrollbar.pack(side="right", fill="y")
+
+        self.create_scent_boxes_grid(columns=4) #### this def is not created yet
+
+        selectors_labelframe = LabelFrame(self, text="Select 3 Scents", padx=10, pady=10)
+        selectors_labelframe.grid(row=0, column=1, sticky="NWE", padx=10, pady=10)
+        selectors_labelframe.grid_columnconfigure(0, weight=1)  # Allow comboboxes to expand horizontally
+
+        self.comboboxes = []
+
+        # 3 labels and comboboxes
+        for i in range(3):
+            label = Label(selectors_labelframe, text=(f"Scent {i + 1}:"))
+            label.grid(row=i * 2, column=0, sticky="W") #x2 because label then combobox on then another label 2 rows down
+
+            combobox = Combobox(selectors_labelframe, textvariable=self.selected_scent_vars[i], values=[""] + scent_palette, state="readonly", width=20)
+            combobox.grid(row=i * 2 + 1, column=0, sticky="we", pady=2) #each created combobox is under each label
+
+            self.comboboxes.append(combobox) #saves to list
+
+        #combined totals labelframe
+        totals_labelframe = LabelFrame(self, text="Combined Totals", padx=10, pady=10)
+        totals_labelframe.grid(row=1, column=1, sticky="NSEW", padx=10, pady=10)
+        totals_labelframe.grid_columnconfigure(0, weight=1)
+        totals_labelframe.grid_rowconfigure(0, weight=1)
