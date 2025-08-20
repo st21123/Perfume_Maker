@@ -29,6 +29,7 @@ class FrameManager(Tk):
         self.frames ={}
         self.frames["MainMenu"] = MainMenu(self.container, self)
         self.frames["PaletteSelector"] = PaletteSelector(self.container, self)
+        self.frames["Checkout"] = Checkout(self.container, self)
 
         self.frames["MainGame"] = None
 
@@ -145,7 +146,6 @@ class MainGame(Frame):
 
         self.canvas.create_window((0, 0), window=self.scents_grid_frame, anchor="nw") #keeps top left
 
-
         self.create_scent_boxes_grid(columns=4) 
 
         selectors_labelframe = LabelFrame(self, text="Select 3 Scents", padx=10, pady=10)
@@ -173,11 +173,51 @@ class MainGame(Frame):
         back_button = Button(self, text="BACK", bg="gray", font="Verdana 12 bold", command=self.go_back)
         back_button.grid(row=2, column=1, sticky="NSEW", pady=(10,10), padx=(20,20))
 
+        checkout_button = Button(self, text="checkout", bg="orange", font="Verdana 12 bold", command=lambda: self.controller.show_frame("Checkout"))
+        checkout_button.grid(row=3, column=1, sticky="NSEW", pady=(15,15), padx=(20,20))
+
     def create_scent_boxes_grid(self, columns):
-        pass
+
+        for i, scent_name in enumerate(self.scent_palette):
+            row_number = i // columns 
+            column_number = i % columns
+
+            scent_box = Frame(self.scents_grid_frame, width=150, height=120, padx=5, pady=5, borderwidth=1)
+            scent_box.grid(row=row_number, col=column_number, sticky="NSEW", padx=5, pady=5)   
+            scent_box.grid_propagate(False) 
+            scent_box.grid_columnconfigure(0, weight=1)
+
+            #Adds the types of attributes to the box
+            for j in range(len(self.attributes) + 1): 
+                scent_box.grid_rowconfigure(j, weight=1)
+
+            scent_name_label = Label(scent_box, text=scent_name, font=("Verdana", 10, "bold"))
+            scent_name_label.grid(row=0, column=0, sticky="EW")
+
+            scent_attributes = self.controller.scent_notes_data.get(scent_name, {})
+            
+            #Adds the value of the attribute (key)
+            for j, attribute in enumerate(self.attributes):
+                value = scent_attributes.get(attribute)
+                attribute_label = Label(scent_box, text=f"{attribute.capitalize()}: {value}")
+                attribute_label.grid(row=j + 1, column=0, sticky="W")
+        
+        for i in range(columns):
+            self.scents_grid_frame.grid_columnconfigure(i, weight=1, minsize=100)
+            self.scents_grid_frame.grid_rowconfigure(i, weight=1)
+
 
     def go_back(self):
-        pass
+        if self.scent_palette == list(self.controller.scent_notes_data.keys()):
+            self.controller.show_frame("MainMenu")
+        else:
+            self.controller.show_frame("PaletteSelector")
+
+class Checkout(Frame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+
 
 if __name__ == "__main__":
     app = FrameManager()
