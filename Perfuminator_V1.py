@@ -4,7 +4,6 @@ An app that where you can make your own perfume
 
 Version 1: basic working program, functions, no optimisations, no validation at all
  '''
-
 from tkinter import *
 from tkinter.ttk import Combobox
 import json
@@ -12,7 +11,7 @@ import json
 class FrameManager(Tk):
     def __init__(self):
         super().__init__()
-        self.title("Perfumantor")
+        self.title("Perfuminator")
         self.minsize(800,550)
        
         self.grid_rowconfigure(0, weight=1)
@@ -70,7 +69,7 @@ class MainMenu(Frame):
         for j in range(2):
             self.grid_columnconfigure(j, weight=1)      
 
-        heading = Label(self, text="Welcome to the Perfumanator", font="Verdana 16 bold")
+        heading = Label(self, text="Welcome to the Perfuminator", font="Verdana 16 bold")
         heading.grid(row=0, column=0, columnspan=2, sticky=NSEW)
         main_menu_text = Label(self, text="would you like to choose from", font="Verdana 11")
         main_menu_text.grid(row=2, column=0, columnspan=2, sticky=NSEW, pady=(50, 0))
@@ -159,12 +158,18 @@ class MainGame(Frame):
             combobox = Combobox(selectors_labelframe, textvariable=self.selected_scent_vars[i], values=[""] + self.scent_palette, state="readonly", width=20)
             combobox.grid(row=i * 2 + 1, column=0, sticky="we", pady=2) #each created combobox is under each label
             self.comboboxes.append(combobox)
+            combobox.bind("<<ComboboxSelected>>", self.update_totals) ###ADD
 
         #combined totals labelframe
         totals_labelframe = LabelFrame(self, text="Combined Totals", padx=10, pady=10)
         totals_labelframe.grid(row=1, column=1, sticky="NSEW", padx=10, pady=10)
         totals_labelframe.grid_columnconfigure(0, weight=1)
-        totals_labelframe.grid_rowconfigure(0, weight=1)
+    
+        self.total_labels = {}
+        for i, attribute in enumerate(self.attributes):
+            label = Label(totals_labelframe, text=f"{attribute.capitalize()}: 0", font=("Verdana", 10))
+            label.grid(row=i, column=0, sticky="w", pady=(2, 2)) 
+            self.total_labels[attribute] = label
 
         button_frame = Frame(self)
         button_frame.grid(row=2, column=1, sticky="NSEW", pady=(10,10), padx=(20,20))
@@ -174,9 +179,21 @@ class MainGame(Frame):
         back_button = Button(button_frame, text="BACK", bg="gray", font="Verdana 12 bold", command=self.go_back)
         back_button.grid(row=0, column=0, sticky="NSEW", padx=(0, 5))
 
-
         checkout_button = Button(button_frame, text="CHECKOUT", bg="lightgreen", font="Verdana 12 bold", command=lambda: self.controller.show_frame("Checkout"))
         checkout_button.grid(row=0, column=1, sticky="NSEW", padx=(5, 0))
+
+    def update_totals(self, event=None):
+        totals = {attr: 0 for attr in self.attributes}
+        
+        for var in self.selected_scent_vars:
+            scent_name = var.get()
+            if scent_name:
+                scent_data = self.controller.scent_notes_data.get(scent_name, {})
+                for attr in self.attributes:
+                    totals[attr] += scent_data.get(attr, 0)
+        
+        for attr, total in totals.items():
+            self.total_labels[attr].config(text=f"{attr.capitalize()}: {total}")
 
     def on_canvas_configure(self, event):
         canvas_width = event.width
