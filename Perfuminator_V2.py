@@ -6,6 +6,7 @@ Version 1: basic working program, functions, no optimisations, no validation at 
 # Import modules
 from tkinter import *
 from tkinter.ttk import Combobox
+from tkinter import messagebox
 import json
 
 class FrameManager(Tk):
@@ -229,13 +230,16 @@ class MainGame(Frame):
 
     def go_to_checkout(self):
         '''This method is linked to the checkout button. It is  used to pass the totals for the checkout and raise the frame'''
-        self.update_totals() #Update Totals before going to checkout
-        # Creates a dictionary of the final totals by extracting the value from each label's text
-        # Doing it this way ensures that the totals extracted are the same as the combined totals shown
-        totals_to_pass = {attr: int(label.cget("text").split(": ")[1]) for attr, label in self.total_labels.items()}
-        # Stores the final totals in the FrameManager to then access in checkout
-        self.controller.scent_totals = totals_to_pass
-        self.controller.show_frame("Checkout")
+        confirmation = messagebox.askyesno("Confirm Checkout", "Are you sure you want to proceed to checkout? You will not be able to change your notes")
+        
+        if confirmation:
+            self.update_totals() #Update Totals before going to checkout
+            # Creates a dictionary of the final totals by extracting the value from each label's text
+            # Doing it this way ensures that the totals extracted are the same as the combined totals shown
+            totals_to_pass = {attr: int(label.cget("text").split(": ")[1]) for attr, label in self.total_labels.items()}
+            # Stores the final totals in the FrameManager to then access in checkout
+            self.controller.scent_totals = totals_to_pass
+            self.controller.show_frame("Checkout")
 
     def update_totals(self, event=None):
         '''This method is for when a scent is chosen using a combobox. It calculates each attributes values'''
@@ -246,7 +250,7 @@ class MainGame(Frame):
             # Gets the name of the selected scent
             scent_name = var.get()
             #If not empty, reads data and adds the values to EACH attributes totals
-            if scent_name==True: #If not empty
+            if scent_name: #If not empty
                 scent_data = self.controller.scent_notes_data.get(scent_name, {})
                 for attr in self.attributes:
                     totals[attr] += scent_data.get(attr, 0)
