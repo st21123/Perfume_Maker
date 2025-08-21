@@ -222,6 +222,37 @@ class Checkout(Frame):
         super().__init__(parent)
         self.controller = controller
         self.grid(row=0, column=0, sticky=NSEW)
+        
+        self.scent_name_var = StringVar()
+
+        self.grid_columnconfigure(0, weight=1)
+        for i in range(5): 
+            self.grid_rowconfigure(i, weight=1)
+
+        heading = Label(self, text="CHECKOUT", font=("Verdana", 24, "bold"))
+        heading.grid(row=0, column=0, pady=(20, 10))
+
+        # self.image = PhotoImage(file="placeholder.png")
+        # image_label = Label(self, image=self.image)
+        # image_label.grid(row=1, column=0, pady=10)
+
+        name_label = Label(self, text="Name your scent!", font=("Verdana", 14))
+        name_label.grid(row=2, column=0, pady=(20, 5))
+
+        # Entry box for the user to input the name
+        self.name_entry = Entry(self, textvariable=self.scent_name_var, width=50)
+        self.name_entry.grid(row=3, column=0, pady=(0, 10))
+
+        # binding return so when the user presses return it runs the method
+        self.name_entry.bind("<Return>", self.show_final_scent_name)
+        
+        self.final_scent_label = Label(self, text="", font=("Verdana", 12), justify=LEFT)
+        self.final_scent_label.grid(row=4, column=0, sticky="w", padx=20, pady=10)
+        
+    def show_final_scent_name(self, event=None):
+        """Updates the label with the user-entered scent name."""
+        scent_name = self.scent_name_var.get()
+        self.final_scent_label.config(text=f"Your Final Scent: {scent_name}")
 
 if __name__ == "__main__":
     app = FrameManager()
