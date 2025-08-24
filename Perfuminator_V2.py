@@ -147,6 +147,8 @@ class MainGame(Frame):
         self.scent_palette = scent_palette
         # Defines the attributes for each scent
         self.attributes = ["fruity", "sweet", "citrus", "woody"]
+
+        self.selected_scents=[]
         
         # Creates a list of `StringVar` objects to hold the selected scent names from the comboboxes
         self.selected_scent_vars = []
@@ -188,21 +190,11 @@ class MainGame(Frame):
         selectors_labelframe.grid(row=0, column=1, sticky="NWE", padx=10, pady=10)
         selectors_labelframe.grid_columnconfigure(0, weight=1)
 
-        self.comboboxes = []
-
         # Loops to create three sets of labels and comboboxes
         for i in range(3):
             label = Label(selectors_labelframe, text=(f"Scent {i + 1}:"))
             label.grid(row=i * 2, column=0, sticky="W") #x2 as label on every other line
 
-            # textvariable is linked to the StringVar created
-            # values is set to the scent_palette (and empty if they don't want another scent)
-            combobox = Combobox(selectors_labelframe, textvariable=self.selected_scent_vars[i], values=[""] + self.scent_palette, state="readonly", width=20)
-            combobox.grid(row=i * 2 + 1, column=0, sticky="we", pady=2)
-            self.comboboxes.append(combobox)
-
-            # Binds event to the update_totals method, so totals are recalculated whenever a selection is made
-            combobox.bind("<<ComboboxSelected>>", self.update_totals)
 
         # A LabelFrame for displaying the combined attribute totals
         totals_labelframe = LabelFrame(self, text="Combined Totals", padx=10, pady=10)
@@ -224,9 +216,19 @@ class MainGame(Frame):
 
         back_button = Button(button_frame, text="BACK", bg="gray", font="Verdana 12 bold", command=self.go_back)
         back_button.grid(row=0, column=0, sticky="NSEW", padx=(0, 5))
+        
+        reset_button = Button(button_frame, text="RESET", bg="orange", font="Verdana 12 bold", command=self.reset_selections)
+        reset_button.grid(row=0, column=1, sticky="NSEW", padx=(5, 5))
 
         checkout_button = Button(button_frame, text="CHECKOUT", bg="lightgreen", font="Verdana 12 bold", command=self.go_to_checkout)
         checkout_button.grid(row=0, column=1, sticky="NSEW", padx=(5, 0))
+    
+    # def reset_selections(self):
+
+    #     self.selected_scents = []
+    #     for label in self.###:
+    #         label.config(text=f"Scent {self.###.index(label) + 1}: (None)")
+    #     self.update_totals()
 
     def go_to_checkout(self):
         '''This method is linked to the checkout button. It is  used to pass the totals for the checkout and raise the frame'''
@@ -292,7 +294,11 @@ class MainGame(Frame):
                 value = scent_attributes.get(attribute)
                 attribute_label = Label(scent_box, text=f"{attribute.capitalize()}: {value}")
                 attribute_label.grid(row=j + 1, column=0, sticky="W")
-        
+
+            add_button = Button(scent_box, text="Add", bg="red", fg="black", font=("Verdana", 10, "bold"),
+                                command="")
+            add_button.grid(row=len(self.attributes) + 1, column=0, sticky="NSEW", pady=(5, 0))
+
         # Makes the columns and rows of the scents_grid_frame resizable
         for i in range(columns):
             self.scents_grid_frame.grid_columnconfigure(i, weight=1, minsize=100)
