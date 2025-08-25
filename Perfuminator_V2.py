@@ -148,10 +148,7 @@ class MainGame(Frame):
         # Defines the attributes for each scent
         self.attributes = ["fruity", "sweet", "citrus", "woody"]
         
-        # Creates a list of `StringVar` objects to hold the selected scent names from the comboboxes
-        self.selected_scent_vars = []
-        for i in range(3):
-            self.selected_scent_vars.append(StringVar(value=""))
+        self.selected_scents =[]
 
         # Configures the main grid for this frame
         self.grid_columnconfigure(0, weight=4)  # Left column (scent boxes) gets more space
@@ -224,11 +221,18 @@ class MainGame(Frame):
         reset_button = Button(button_frame, text="RESET", bg="orange", font="Verdana 12 bold", command=self.reset_selections)
         reset_button.grid(row=0, column=1, sticky="NSEW", padx=(5, 5))
 
-    def select_scent(self, scent_name):
+    def select_scent(self):
         pass
 
+    def update_selection_display(self, scent_name):
+        for i, scent_name in enumerate(self.selected_scents):
+            self.selected_scent_labels[i].config(text=f"Scent {i + 1}: {scent_name}")
+
     def reset_selections(self):
-        pass
+        self.selected_scents =[]
+        for label in self.selected_scent_labels:
+            label.config(text=f"Scent: (None))")
+        self.update_totals
 
     def go_to_checkout(self):
         '''This method is linked to the checkout button. It is  used to pass the totals for the checkout and raise the frame'''
@@ -244,22 +248,16 @@ class MainGame(Frame):
             self.controller.show_frame("Checkout")
 
     def update_totals(self, event=None):
-        '''This method is for when a scent is chosen using a combobox. It calculates each attributes values'''
-        # Initializes a dictionary to store the totals for each attribute (all start at 0)
         totals = {attr: 0 for attr in self.attributes}
         
-        for var in self.selected_scent_vars:
-            # Gets the name of the selected scent
-            scent_name = var.get()
-            #If not empty, reads data and adds the values to EACH attributes totals
-            if scent_name: #If not empty
-                scent_data = self.controller.scent_notes_data.get(scent_name, {})
-                for attr in self.attributes:
-                    totals[attr] += scent_data.get(attr, 0)
+        for scent_name in self.selected_scents:
+            scent_data = self.controller.scent_notes_data.get(scent_name, {})
+            for attr in self.attributes:
+                totals[attr] += scent_data.get(attr, 0)
         
-        # Updates text
         for attr, total in totals.items():
             self.total_labels[attr].config(text=f"{attr.capitalize()}: {total}")
+
 
     def on_canvas_configure(self, event):
         '''This method is for when the canvas is resized'''
@@ -289,12 +287,15 @@ class MainGame(Frame):
 
             # Gets attribute data and creates a label, for each one, displaying its value
             scent_attributes = self.controller.scent_notes_data.get(scent_name, {})
-            
             for j, attribute in enumerate(self.attributes):
                 value = scent_attributes.get(attribute)
                 attribute_label = Label(scent_box, text=f"{attribute.capitalize()}: {value}")
                 attribute_label.grid(row=j + 1, column=0, sticky="W")
-        
+            
+            add_button = Button(scent_box, text="Add", bg="red", fg="black", font=("Verdana", 10, "bold"),
+                                command=lambda s=scent_name: self.select_scent(s))
+            add_button.grid(row=len(self.attributes) + 1, column=0, sticky="NSEW", pady=(5, 0))
+
         # Makes the columns and rows of the scents_grid_frame resizable
         for i in range(columns):
             self.scents_grid_frame.grid_columnconfigure(i, weight=1, minsize=100)
