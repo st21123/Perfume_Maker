@@ -235,12 +235,12 @@ class MainGame(Frame):
     def reset_selections(self):
         self.selected_scents =[]
         for label in self.selected_scent_labels:
-            label.config(text=f"Scent: (None))")
+            label.config(text=f"Scent: (None)")
         self.update_totals
 
     def go_to_checkout(self):
         '''This method is linked to the checkout button. It is  used to pass the totals for the checkout and raise the frame'''
-        confirmation = messagebox.askyesno("Confirm Checkout", "Are you sure you want to proceed to checkout? You will not be able to change your notes")
+        confirmation = messagebox.askyesno("Confirm Checkout", "Are you sure you want to proceed to checkout? You will not be able to change your chosen scents")
         
         if confirmation:
             self.update_totals() #Update Totals before going to checkout
@@ -251,6 +251,15 @@ class MainGame(Frame):
             self.controller.scent_totals = totals_to_pass
             self.controller.selected_scent_names = self.selected_scents
             self.controller.show_frame("Checkout")
+
+    def go_back(self):
+        '''This method is linked to the back button. Depending if the user chose free reign or palette takes them back to that frame'''
+        confirmation = messagebox.askyesno("Confirm Back", "Are you sure you want to go back? Your choices will not be saved")
+        if confirmation:
+            if self.scent_palette == list(self.controller.scent_notes_data.keys()):
+                self.controller.show_frame("MainMenu")
+            else:
+                self.controller.show_frame("PaletteSelector")
 
     def update_totals(self, event=None):
         totals = {attr: 0 for attr in self.attributes}
@@ -306,12 +315,6 @@ class MainGame(Frame):
             self.scents_grid_frame.grid_columnconfigure(i, weight=1, minsize=100)
             self.scents_grid_frame.grid_rowconfigure(i, weight=1)
 
-    def go_back(self):
-        '''This method is linked to the back button. Depending if the user chose free reign or palette takes them back to that frame'''
-        if self.scent_palette == list(self.controller.scent_notes_data.keys()):
-            self.controller.show_frame("MainMenu")
-        else:
-            self.controller.show_frame("PaletteSelector")
 
 class Checkout(Frame):
     '''Checkout Frame. This frame gets the user to pick a name for their perfume and then displays their final order'''
