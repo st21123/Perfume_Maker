@@ -24,6 +24,7 @@ class FrameManager(Tk):
         self.scent_notes_data = {}  # Stores data for individual scent notes from the JSON file
         self.palettes_data = {}     # Stores data for preset scent palettes from the JSON file
         self.scent_totals = {}      # Stores the calculated totals of scent attributes to be passed to the checkout frame
+        self.selected_scent_names = []
         self.load_scent_data("scent_data.json")
 
         # Container frame to hold all the frames in it
@@ -168,9 +169,9 @@ class MainGame(Frame):
         # Creates a vertical scrollbar and links it to the canvas and links the canvas to the scrollbar
         vertical_scrollbar = Scrollbar(scents_container, orient="vertical", command=self.canvas.yview)
         vertical_scrollbar.grid(row=0, column=1, sticky=NS)
+        self.scents_grid_frame = Frame(self.canvas)
         self.canvas.configure(yscrollcommand=vertical_scrollbar.set)
 
-        self.scents_grid_frame = Frame(self.canvas)
 
         # Creates a window in the canvas to hold the frame
         self.window_scroll = self.canvas.create_window((0, 0), window=self.scents_grid_frame, anchor="nw")
@@ -192,7 +193,6 @@ class MainGame(Frame):
             label.grid(row=i, column=0, sticky="W", pady=2)
             self.selected_scent_labels.append(label)
         
-        
         totals_labelframe = LabelFrame(self, text="Combined Totals", padx=10, pady=10)
         totals_labelframe.grid(row=1, column=1, sticky="NSEW", padx=10, pady=10)
         totals_labelframe.grid_columnconfigure(0, weight=1)
@@ -203,7 +203,6 @@ class MainGame(Frame):
             label = Label(totals_labelframe, text=f"{attribute.capitalize()}: 0", font=("Verdana", 12))
             label.grid(row=i, column=0, sticky="w", pady=(2, 2))
             self.total_labels[attribute] = label
-
 
         # A frame to hold the buttons and the buttons
         button_frame = Frame(self)
@@ -219,12 +218,17 @@ class MainGame(Frame):
         checkout_button.grid(row=0, column=1, sticky="NSEW", padx=(5, 0))
 
         reset_button = Button(button_frame, text="RESET", bg="orange", font="Verdana 12 bold", command=self.reset_selections)
-        reset_button.grid(row=0, column=1, sticky="NSEW", padx=(5, 5))
+        reset_button.grid(row=0, column=2, sticky="NSEW", padx=(5, 5))
 
-    def select_scent(self):
-        pass
+    def select_scent(self, scent_name):
+        if len(self.selected_scents) < 3:
+            self.selected_scents.append(scent_name)
+            self.update_selection_display()
+            self.update_totals()
+        else:
+            messagebox.showinfo("Limit Reached", "You can only select a maximum of 3 scents.")
 
-    def update_selection_display(self, scent_name):
+    def update_selection_display(self):
         for i, scent_name in enumerate(self.selected_scents):
             self.selected_scent_labels[i].config(text=f"Scent {i + 1}: {scent_name}")
 
@@ -245,6 +249,7 @@ class MainGame(Frame):
             totals_to_pass = {attr: int(label.cget("text").split(": ")[1]) for attr, label in self.total_labels.items()}
             # Stores the final totals in the FrameManager to then access in checkout
             self.controller.scent_totals = totals_to_pass
+            self.controller.selected_scent_names = self.selected_scents
             self.controller.show_frame("Checkout")
 
     def update_totals(self, event=None):
@@ -279,7 +284,7 @@ class MainGame(Frame):
             scent_box.grid_columnconfigure(0, weight=1)
 
             # Configures the rows inside the scent box to be resizable, depending on the name and attributes length
-            for j in range(len(self.attributes) + 1):
+            for j in range(len(self.attributes)):
                 scent_box.grid_rowconfigure(j, weight=1)
 
             scent_name_label = Label(scent_box, text=scent_name, font=("Verdana", 10, "bold"))
