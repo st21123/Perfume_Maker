@@ -1,0 +1,63 @@
+
+{
+    "scent_notes": {
+      "Lemon": {"fruity": 2, "sweet": 1, "citrus": 3, "woody": 0},
+      "Vanilla": {"fruity": 1, "sweet": 3, "citrus": 0, "woody": 0},
+      "Pine": {"fruity": 0, "sweet": 0, "citrus": 1, "woody": 3},
+      "Candy": {"fruity": 2, "sweet": 3, "citrus": 0, "woody": 0},
+      "Sandalwood": {"fruity": 0, "sweet": 1, "citrus": 0, "woody": 3},
+      "Rose": {"fruity": 2, "sweet": 2, "citrus": 0, "woody": 0},
+      "Berries": {"fruity": 3, "sweet": 2, "citrus": 1, "woody": 0},
+      "Citrus": {"fruity": 2, "sweet": 1, "citrus": 3, "woody": 0},
+      "Lavender": {"fruity": 0, "sweet": 1, "citrus": 0, "woody": 2},
+      "Mint": {"fruity": 0, "sweet": 1, "citrus": 2, "woody": 1},
+      "Apple": {"fruity": 3, "sweet": 2, "citrus": 1, "woody": 0},
+      "Musk": {"fruity": 0, "sweet": 0, "citrus": 0, "woody": 3},
+      "Jasmine": {"fruity": 1, "sweet": 2, "citrus": 0, "woody": 1},
+      "Cedar": {"fruity": 0, "sweet": 0, "citrus": 0, "woody": 3},
+      "Orange": {"fruity": 3, "sweet": 1, "citrus": 3, "woody": 0},
+      "Ginger": {"fruity": 1, "sweet": 0, "citrus": 2, "woody": 1},
+      "Peach": {"fruity": 3, "sweet": 2, "citrus": 1, "woody": 0},
+      "Ocean": {"fruity": 0, "sweet": 0, "citrus": 1, "woody": 2},
+      "Cocoa": {"fruity": 0, "sweet": 3, "citrus": 0, "woody": 1},
+      "Basil": {"fruity": 0, "sweet": 0, "citrus": 1, "woody": 2},
+      "Cherry": {"fruity": 3, "sweet": 2, "citrus": 1, "woody": 0},
+      "Fig": {"fruity": 2, "sweet": 2, "citrus": 0, "woody": 1},
+      "Coconut": {"fruity": 2, "sweet": 3, "citrus": 0, "woody": 0},
+      "Tobacco": {"fruity": 0, "sweet": 1, "citrus": 0, "woody": 3},
+      "Amber": {"fruity": 0, "sweet": 2, "citrus": 0, "woody": 2},
+      "Patchouli": {"fruity": 0, "sweet": 0, "citrus": 0, "woody": 3},
+      "Ylang": {"fruity": 2, "sweet": 2, "citrus": 0, "woody": 0},
+      "Green Tea": {"fruity": 1, "sweet": 1, "citrus": 2, "woody": 1},
+      "Clove": {"fruity": 0, "sweet": 0, "citrus": 0, "woody": 2},
+      "Lilac": {"fruity": 1, "sweet": 2, "citrus": 0, "woody": 0},
+      "Honey": {"fruity": 1, "sweet": 3, "citrus": 0, "woody": 0},
+      "Pear": {"fruity": 3, "sweet": 2, "citrus": 1, "woody": 0},
+      "Bergamot": {"fruity": 2, "sweet": 1, "citrus": 3, "woody": 0},
+      "Incense": {"fruity": 0, "sweet": 0, "citrus": 0, "woody": 3},
+      "Marshmallow": {"fruity": 1, "sweet": 3, "citrus": 0, "woody": 0},
+      "Rain": {"fruity": 0, "sweet": 0, "citrus": 1, "woody": 1},
+      "Gardenia": {"fruity": 1, "sweet": 2, "citrus": 0, "woody": 0},
+      "Cardamom": {"fruity": 0, "sweet": 0, "citrus": 1, "woody": 2},
+      "Vanillin": {"fruity": 1, "sweet": 3, "citrus": 0, "woody": 0},
+      "Tea Tree": {"fruity": 0, "sweet": 0, "citrus": 2, "woody": 2}
+    },
+    "palettes": {
+      "summer": [
+        "Lemon", "Orange", "Peach", "Apple", "Pear", "Bergamot", "Mint", "Green Tea",
+        "Rain", "Citrus", "Rose", "Berries", "Jasmine", "Honey", "Marshmallow", "Vanillin"
+      ],
+      "outdoors": [
+        "Pine", "Sandalwood", "Musk", "Cedar", "Ocean", "Patchouli", "Basil", "Clove",
+        "Cardamom", "Tea Tree", "Tobacco", "Amber", "Incense", "Gardenia", "Ylang", "Rain"
+      ],
+      "candy": [
+        "Candy", "Vanilla", "Coconut", "Cocoa", "Marshmallow", "Honey", "Cherry", "Fig",
+        "Lilac", "Vanillin", "Berries", "Peach", "Apple", "Rose", "Orange", "Lemon"
+      ],
+      "zesty": [
+        "Lemon", "Orange", "Ginger", "Citrus", "Green Tea", "Bergamot", "Tea Tree", "Mint",
+        "Rain", "Cardamom", "Ylang", "Jasmine", "Clove", "Basil", "Pine", "Sandalwood"
+      ]
+    }
+  }
