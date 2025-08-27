@@ -1,5 +1,10 @@
 '''
-An app that where you can make your own perfume.
+Project Name: Perfuminator
+Author: Elliot Wale
+Date: 27/08/2025
+
+Description: An app that where you can make your own perfume.
+
 Version 1: basic working program, functions,
            no optimisations, no validation at all
 Version 2: optimised for efficiency, aesthetic changes,
@@ -10,8 +15,7 @@ Version 3: Added Validation, formatted for pep8
 # Import modules
 import json
 from tkinter import (Tk, Frame, Label, Button, Canvas, Scrollbar, LabelFrame,
-                     PhotoImage, StringVar, Entry, messagebox, NSEW, NS, W,
-                     CENTER)
+                     PhotoImage, StringVar, Entry, messagebox)
 
 
 class FrameManager(Tk):
@@ -43,7 +47,7 @@ class FrameManager(Tk):
         self.container.grid_rowconfigure(0, weight=1)
         self.container.grid_columnconfigure(0, weight=1)
         # Places the container in the main window's grid, fills entire grid
-        self.container.grid(row=0, column=0, sticky=NSEW)
+        self.container.grid(row=0, column=0, sticky="NSEW")
 
         # A dictionary to hold each frame
         self.frames = {}
@@ -124,7 +128,7 @@ class FrameManager(Tk):
         # selected palette
         self.frames["MainGame"] = MainGame(
             self.container, self, selected_palette)
-        self.frames["MainGame"].grid(row=0, column=0, sticky=NSEW)
+        self.frames["MainGame"].grid(row=0, column=0, sticky="NSEW")
         self.show_frame("MainGame")
 
 
@@ -134,7 +138,7 @@ class BaseFrame(Frame):
     def __init__(self, parent, controller, grid_rows, grid_columns):
         super().__init__(parent)
         self.controller = controller
-        self.grid(row=0, column=0, sticky=NSEW)
+        self.grid(row=0, column=0, sticky="NSEW")
         self.configuring_grid(grid_rows, grid_columns)
 
     def configuring_grid(self, rows, columns):
@@ -155,7 +159,7 @@ class MainMenu(BaseFrame):
         # Creates and places the main heading label
         heading = Label(
             self, text="Welcome to the Perfuminator", font="Verdana 24 bold")
-        heading.grid(row=0, column=0, columnspan=2, sticky=NSEW)
+        heading.grid(row=0, column=0, columnspan=2, sticky="NSEW")
 
         # Loads and displays image
         self.image = PhotoImage(file="perfume.png")
@@ -166,19 +170,19 @@ class MainMenu(BaseFrame):
         main_menu_text = Label(
             self, text="would you like to choose from", font="Verdana 11")
         main_menu_text.grid(row=2, column=0, columnspan=2,
-                            sticky=NSEW, pady=(30, 0))
+                            sticky="NSEW", pady=(30, 0))
 
         # Buttons for free reign and palette, commands take them to their
         # respective frames
         free_reign_button = self.create_styled_button(
             "Free Reign", "lightgreen",
             lambda: self.controller.start_main_game("free_reign"))
-        free_reign_button.grid(row=3, column=0, sticky=NSEW)
+        free_reign_button.grid(row=3, column=0, sticky="NSEW")
 
         preset_palette_button = self.create_styled_button(
             "Preset Palette", "yellow",
             lambda: self.controller.show_frame("PaletteSelector"))
-        preset_palette_button.grid(row=3, column=1, sticky=NSEW)
+        preset_palette_button.grid(row=3, column=1, sticky="NSEW")
 
     def create_styled_button(self, text, bg_color, command):
         """This method simplifies the button creation."""
@@ -196,29 +200,29 @@ class PaletteSelector(BaseFrame):
         # Heading
         heading = Label(self, text="Our Premade Palettes",
                         font="Verdana 24 bold")
-        heading.grid(row=0, column=0, sticky=NSEW)
+        heading.grid(row=0, column=0, sticky="NSEW")
 
         # Creates buttons for each preset palette by calling a method
         self.create_palette_button(
             "Summer Palette (more fruity scents)", "yellow", "summer"
-        ).grid(row=1, column=0, sticky=NSEW, pady=(10, 10), padx=(20, 20))
+        ).grid(row=1, column=0, sticky="NSEW", pady=(10, 10), padx=(20, 20))
         self.create_palette_button(
             "Outdoors Palette (more woody scents)", "forest green",
             "outdoors"
-        ).grid(row=2, column=0, sticky=NSEW, pady=(10, 10), padx=(20, 20))
+        ).grid(row=2, column=0, sticky="NSEW", pady=(10, 10), padx=(20, 20))
         self.create_palette_button(
             "Candy Palette (more sweet scents)", "hot pink", "candy"
-        ).grid(row=3, column=0, sticky=NSEW, pady=(10, 10), padx=(20, 20))
+        ).grid(row=3, column=0, sticky="NSEW", pady=(10, 10), padx=(20, 20))
         self.create_palette_button(
             "Zesty Palette (more Citrusy scents)", "orange", "zesty"
-        ).grid(row=4, column=0, sticky=NSEW, pady=(10, 10), padx=(20, 20))
+        ).grid(row=4, column=0, sticky="NSEW", pady=(10, 10), padx=(20, 20))
 
         # Button to go back to MainMenu
         back_button = Button(
             self, text="BACK TO MAIN MENU", bg="gray",
             font="Verdana 12 bold",
             command=lambda: self.controller.show_frame("MainMenu"))
-        back_button.grid(row=5, column=0, sticky=NSEW,
+        back_button.grid(row=5, column=0, sticky="NSEW",
                          pady=(10, 20), padx=(20, 20))
 
     def create_palette_button(self, text, color, palette_name):
@@ -260,13 +264,13 @@ class MainGame(Frame):
 
         # Creates a widget, which is necessary for adding a scrollbar
         self.canvas = Canvas(scents_container)
-        self.canvas.grid(row=0, column=0, sticky=NSEW)
+        self.canvas.grid(row=0, column=0, sticky="NSEW")
 
         # Creates a vertical scrollbar and links it to the canvas
         vertical_scrollbar = Scrollbar(
             scents_container, orient="vertical",
             command=self.canvas.yview)
-        vertical_scrollbar.grid(row=0, column=1, sticky=NS)
+        vertical_scrollbar.grid(row=0, column=1, sticky="NS")
 
         self.scents_grid_frame = Frame(self.canvas)
         self.canvas.configure(yscrollcommand=vertical_scrollbar.set)
@@ -529,17 +533,17 @@ class Checkout(BaseFrame):
 
         # A label to display the final scent name, totals and chosen scents
         self.final_perfume_label = Label(
-            self, text="", font=("Verdana", 13, "bold"), justify=CENTER)
+            self, text="", font=("Verdana", 13, "bold"), justify="center")
         self.final_perfume_label.grid(
             row=5, column=0, columnspan=2, sticky="n", pady=(10, 10))
 
         self.final_totals_label = Label(
-            self, text="", font=("Verdana", 11, "bold"), justify=CENTER)
+            self, text="", font=("Verdana", 11, "bold"), justify="center")
         self.final_totals_label.grid(
             row=6, column=1, sticky="ns", padx=(30, 13), pady=10)
 
         self.final_selected_scents_label = Label(
-            self, text="", font=("Verdana", 11, "bold"), justify=CENTER)
+            self, text="", font=("Verdana", 11, "bold"), justify="center")
         self.final_selected_scents_label.grid(
             row=6, column=0, sticky="ns", padx=(10, 30), pady=10)
 
