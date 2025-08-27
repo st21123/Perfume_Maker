@@ -5,7 +5,6 @@ Version 1: basic working program, functions, no optimisations, no validation at 
 
 # Import modules
 from tkinter import *
-from tkinter.ttk import Combobox
 from tkinter import messagebox
 import json
 
@@ -14,7 +13,8 @@ class FrameManager(Tk):
     def __init__(self):
         super().__init__()
         self.title("Perfuminator") 
-        self.minsize(800, 550)
+        self.minsize(850, 575)
+
         
         # Takes up whole space and resizes with expanding
         self.grid_rowconfigure(0, weight=1)
@@ -87,16 +87,16 @@ class MainMenu(Frame):
             self.grid_columnconfigure(j, weight=1)      
 
         # Creates and places the main heading label
-        heading = Label(self, text="Welcome to the Perfuminator", font="Verdana 16 bold")
+        heading = Label(self, text="Welcome to the Perfuminator", font="Verdana 24 bold")
         heading.grid(row=0, column=0, columnspan=2, sticky=NSEW)
 
         # Loads and displays image
-        self.image = PhotoImage(file="placeholder.png")
+        self.image = PhotoImage(file="perfume.png")
         image_label = Label(self, image=self.image)
         image_label.grid(row=1, column=0, pady=10, sticky="NSEW", columnspan=2)
 
         main_menu_text = Label(self, text="would you like to choose from", font="Verdana 11")
-        main_menu_text.grid(row=2, column=0, columnspan=2, sticky=NSEW, pady=(50, 0))
+        main_menu_text.grid(row=2, column=0, columnspan=2, sticky=NSEW, pady=(30, 0))
 
         #Buttons for free reign and palette, commands takes them to their respective frames
         free_reign_button = Button(self, text="Free Reign", bg="lightgreen", font="Verdana 12 bold", command=lambda: self.controller.start_main_game("free_reign"))
@@ -119,7 +119,7 @@ class PaletteSelector(Frame):
             self.grid_columnconfigure(j, weight=1)    
 
         # Heading
-        heading = Label(self, text="Our Premade Palettes", font="Verdana 16 bold")
+        heading = Label(self, text="Our Premade Palettes", font="Verdana 24 bold")
         heading.grid(row=0, column=0, sticky=NSEW)
 
         # Creates buttons for each preset palette, each button's command calls `start_main_game` with a different palette name
@@ -136,8 +136,8 @@ class PaletteSelector(Frame):
         zesty_palette_button.grid(row=4, column=0, sticky=NSEW, pady=(10,10), padx=(20,20))
 
         # Button to go back to MainMenu
-        back_button = Button(self, text="BACK", bg="gray", font="Verdana 12 bold", command=lambda: self.controller.show_frame("MainMenu"))
-        back_button.grid(row=5, column=0, sticky=NSEW, pady=(10,10), padx=(20,20))
+        back_button = Button(self, text="BACK TO MAIN MENU", bg="gray", font="Verdana 12 bold", command=lambda: self.controller.show_frame("MainMenu"))
+        back_button.grid(row=5, column=0, sticky=NSEW, pady=(10,20), padx=(20,20))
 
 class MainGame(Frame):
     '''Main Game Class, This class is where the user will choose the scents for their perfume'''
@@ -152,9 +152,12 @@ class MainGame(Frame):
         self.selected_scents =[]
 
         # Configures the main grid for this frame
-        self.grid_columnconfigure(0, weight=4)  # Left column (scent boxes) gets more space
+        self.grid_columnconfigure(0, weight=5)  # Left column (scent boxes) gets more space
         self.grid_columnconfigure(1, weight=1)  # Right column (selectors, totals) gets less space
-        self.grid_rowconfigure(1, weight=1)     # Allows the totals to expand
+
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(2, weight=1)
 
         # A Frame to contain the scrollable list of scent notes
         scents_container = Frame(self)
@@ -169,9 +172,9 @@ class MainGame(Frame):
         # Creates a vertical scrollbar and links it to the canvas and links the canvas to the scrollbar
         vertical_scrollbar = Scrollbar(scents_container, orient="vertical", command=self.canvas.yview)
         vertical_scrollbar.grid(row=0, column=1, sticky=NS)
+
         self.scents_grid_frame = Frame(self.canvas)
         self.canvas.configure(yscrollcommand=vertical_scrollbar.set)
-
 
         # Creates a window in the canvas to hold the frame
         self.window_scroll = self.canvas.create_window((0, 0), window=self.scents_grid_frame, anchor="nw")
@@ -182,8 +185,8 @@ class MainGame(Frame):
         self.create_scent_boxes_grid(columns=4)
 
         # A LabelFrame widget to group the scent selection comboboxes
-        selectors_labelframe = LabelFrame(self, text="Select 3 Scents", padx=10, pady=10)
-        selectors_labelframe.grid(row=0, column=1, sticky="NWE", padx=10, pady=10)
+        selectors_labelframe = LabelFrame(self, text="Selected Scents", padx=10, pady=10)
+        selectors_labelframe.grid(row=0, column=1, sticky="NSEW", padx=10, pady=10)
         selectors_labelframe.grid_columnconfigure(0, weight=1)
 
         self.selected_scent_labels = []
@@ -214,11 +217,11 @@ class MainGame(Frame):
         back_button = Button(button_frame, text="BACK", bg="gray", font="Verdana 12 bold", command=self.go_back)
         back_button.grid(row=0, column=0, sticky="NSEW", padx=(0, 5))
 
-        checkout_button = Button(button_frame, text="CHECKOUT", bg="lightgreen", font="Verdana 12 bold", command=self.go_to_checkout)
-        checkout_button.grid(row=0, column=1, sticky="NSEW", padx=(5, 0))
-
         reset_button = Button(button_frame, text="RESET", bg="orange", font="Verdana 12 bold", command=self.reset_selections)
-        reset_button.grid(row=0, column=2, sticky="NSEW", padx=(5, 5))
+        reset_button.grid(row=0, column=1, sticky="NSEW", padx=(5, 5))
+
+        checkout_button = Button(button_frame, text="CHECKOUT", bg="lightgreen", font="Verdana 12 bold", command=self.go_to_checkout)
+        checkout_button.grid(row=0, column=2, sticky="NSEW", padx=(5, 0))
 
     def select_scent(self, scent_name):
         if len(self.selected_scents) < 3:
@@ -233,10 +236,10 @@ class MainGame(Frame):
             self.selected_scent_labels[i].config(text=f"Scent {i + 1}: {scent_name}")
 
     def reset_selections(self):
-        self.selected_scents =[]
+        self.selected_scents = []
         for label in self.selected_scent_labels:
-            label.config(text=f"Scent: (None)")
-        self.update_totals
+            label.config(text=f"Scent {self.selected_scent_labels.index(label) + 1}: (None)")
+        self.update_totals()
 
     def go_to_checkout(self):
         '''This method is linked to the checkout button. It is  used to pass the totals for the checkout and raise the frame'''
@@ -287,14 +290,16 @@ class MainGame(Frame):
             row_number = i // columns
             column_number = i % columns
             #Makes each 'box' is it's own frame and places it according to it's calculated row and column
-            scent_box = Frame(self.scents_grid_frame, width=150, height=120, padx=5, pady=5, borderwidth=1, relief="solid") 
+            scent_box = Frame(self.scents_grid_frame, width=150, height=160, padx=5, pady=5, borderwidth=1, relief="solid") 
             scent_box.grid(row=row_number, column=column_number, sticky="NSEW", padx=5, pady=5)  
             scent_box.grid_propagate(False) #Prevents Resizing
             scent_box.grid_columnconfigure(0, weight=1)
+            scent_box.grid_rowconfigure(0, weight=1)
 
             # Configures the rows inside the scent box to be resizable, depending on the name and attributes length
             for j in range(len(self.attributes)):
                 scent_box.grid_rowconfigure(j, weight=1)
+            scent_box.grid_rowconfigure(len(self.attributes) + 1, weight=1)
 
             scent_name_label = Label(scent_box, text=scent_name, font=("Verdana", 10, "bold"))
             scent_name_label.grid(row=0, column=0, sticky="EW")
@@ -322,50 +327,66 @@ class Checkout(Frame):
         super().__init__(parent)
         self.controller = controller
         self.grid(row=0, column=0, sticky=NSEW)
+        self.grid_propagate(False)
 
-        self.scent_name_var = StringVar()
+        self.perfume_name_var = StringVar()
 
-        self.grid_columnconfigure(0, weight=1)
-        for i in range(5):
+        for i in range(7):
             self.grid_rowconfigure(i, weight=1)
+            
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
 
-        heading = Label(self, text="CHECKOUT", font=("Verdana", 24, "bold"))
-        heading.grid(row=0, column=0, pady=(20, 10))
+        heading = Label(self, text="Your Created Perfume", font=("Verdana", 24, "bold"))
+        heading.grid(row=0, column=0, columnspan=2, pady=(20, 10))
 
         # Loads and displays the image
-        self.image = PhotoImage(file="placeholder.png")
+        self.image = PhotoImage(file="perfume.png")
         image_label = Label(self, image=self.image)
-        image_label.grid(row=1, column=0, pady=10)
+        image_label.grid(row=1, column=0, columnspan=2, pady=10)
 
         # Creates a label and entry, prompting the user to name the scent
-        name_label = Label(self, text="Name your scent!", font=("Verdana", 14))
-        name_label.grid(row=2, column=0, pady=(20, 5))
+        name_label = Label(self, text="Name your scent!", font=("Verdana", 16))
+        name_label.grid(row=2, column=0, columnspan=2, pady=(20, 5))
 
-        self.name_entry = Entry(self, textvariable=self.scent_name_var, width=50)
-        self.name_entry.grid(row=3, column=0, pady=(0, 10))
+        char_limit_label = Label(self, text="(max 24 characters)", font=("Verdana", 10))
+        char_limit_label.grid(row=3, column=0, columnspan=2)
+
+        self.name_entry = Entry(self, textvariable=self.perfume_name_var, width=50)
+        self.name_entry.grid(row=4, column=0, columnspan=2, pady=(10, 10))
 
         # Binds the return or enter key to the show_final_scent_name method, running it when it's pressed
         self.name_entry.bind("<Return>", self.show_final_scent_name)
         
         # A label to display the final scent name and totals
-        self.final_scent_label = Label(self, text="", font=("Verdana", 12), justify=LEFT)
-        self.final_scent_label.grid(row=4, column=0, sticky="w", padx=20, pady=10)
-        
-        self.final_totals_label = Label(self, text="", font=("Verdana", 10), justify=LEFT)
-        self.final_totals_label.grid(row=5, column=0, sticky="w", padx=20, pady=5)
+        self.final_scent_label = Label(self, text="", font=("Verdana", 13), justify=CENTER)
+        self.final_scent_label.grid(row=5, column=0, columnspan=2, sticky="n", pady=(10, 10))
 
+        self.final_totals_label = Label(self, text="", font=("Verdana", 11), justify=CENTER)
+        self.final_totals_label.grid(row=6, column=1, sticky="ns", padx=(30, 13), pady=10)
+        
+        self.final_selected_scents_label = Label(self, text="", font=("Verdana", 11), justify=CENTER)
+        self.final_selected_scents_label.grid(row=6, column=0, sticky="ns", padx=(10, 30), pady=10)
+    
     def show_final_scent_name(self, event=None):
         '''This method updates the labels with the entered scent name and the combined totals.'''
 
-        scent_name = self.scent_name_var.get()
-        self.final_scent_label.config(text=f"Your Final Scent: {scent_name}")
+        perfume_name = self.perfume_name_var.get()
 
-        # Retrieves the scent totals from the FrameManager
+        if len(perfume_name) > 24:
+            messagebox.showerror("Error", "Scent name cannot exceed 24 characters.")
+            return
+        
+        self.final_scent_label.config(text=f"Your Final Scent: {perfume_name}")
+
         totals = self.controller.scent_totals
-
-        #Puts each attribute and it's value on a seperate line and updates
-        totals_text = "\n".join([f"{key.capitalize()}: {value}" for key, value in totals.items()]) 
+        totals_list = [f"{key.capitalize()}: {value}" for key, value in totals.items()]
+        totals_text = "Fragrance Profile: \n" + "\n".join(totals_list)
         self.final_totals_label.config(text=totals_text)
+        
+        selected_scents = self.controller.selected_scent_names
+        selected_scents_text = "Selected Scents:\n" + "\n".join(selected_scents)
+        self.final_selected_scents_label.config(text=selected_scents_text)
 
 # Runs and creates an instance of the Framemanager, which controls everything.
 if __name__ == "__main__":
