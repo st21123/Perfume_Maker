@@ -2,6 +2,7 @@
 An app that where you can make your own perfume.
 Version 1: basic working program, functions, no optimisations, no validation at all
 Version 2: optimised for efficiency, aesthetic changes, proper sizing
+Version 3: Added Validation
 '''
 
 # Import modules
@@ -50,11 +51,26 @@ class FrameManager(Tk):
 
     def load_scent_data(self, filename="scent_data.json"):
         '''Loads scent notes and palettes from a JSON file'''
-        with open(filename, 'r') as f:
-            data = json.load(f)
+        try:
+            with open(filename, 'r') as f:
+                data = json.load(f)
+            
+            # Checks if the necessary keys are found in the file
+            if "scent_notes" not in data or "palettes" not in data:
+                messagebox.showerror("Data Error", "JSON data file is missing required 'scent_notes' or 'palettes' keys.")
+                self.destroy()
+                return
+
             self.scent_notes_data = data.get("scent_notes", {}) 
             self.palettes_data = data.get("palettes", {})
 
+        except FileNotFoundError:
+            messagebox.showerror("File Not Found", f"The file '{filename}' was not found. Please ensure it is in the correct folder.")
+            self.destroy()
+        except json.JSONDecodeError:
+            messagebox.showerror("JSON Error", f"The file '{filename}' is not a valid JSON file.")
+            self.destroy()
+            
     def show_frame(self, name):
         '''Display the required frame from the dictionary'''
         frame = self.frames[name]
@@ -67,6 +83,16 @@ class FrameManager(Tk):
         else:
             selected_palette = self.palettes_data.get(palette_type, []) #Loads specific palette
 
+        # Check if all scent notes in the palette exist in the main scent data.
+        try:
+            for scent in selected_palette:
+                if scent not in self.scent_notes_data:
+                    raise KeyError(f"Scent note '{scent}' from the '{palette_type}' palette is missing data.")
+        except KeyError:
+            messagebox.showerror("Some Data is missing from chosen pallete. Please doublecheck file")
+            self.destroy()
+            return
+        
         # Remakes a new instance of the the 'MainGame' frame with the selected palett
         self.frames["MainGame"] = MainGame(self.container, self, selected_palette)
         self.frames["MainGame"].grid(row=0, column=0, sticky=NSEW)
@@ -242,13 +268,21 @@ class MainGame(Frame):
 
     def reset_selections(self):
         '''This method resets users selections, emptying the list'''
-        self.selected_scents = []
-        for label in self.selected_scent_labels:
-            label.config(text=f"Scent {self.selected_scent_labels.index(label) + 1}: (None)")
-        self.update_totals()
+        confirmation = messagebox.askyesno("Confirm Reset", "Are you sure you want to reset choices?")
+        
+        if confirmation:
+            self.selected_scents = []
+            for label in self.selected_scent_labels:
+                label.config(text=f"Scent {self.selected_scent_labels.index(label) + 1}: (None)")
+            self.update_totals()
 
     def go_to_checkout(self):
         '''This method is linked to the checkout button. It is used to pass the totals for the checkout and raise the frame'''
+        
+        if not self.selected_scents:
+            messagebox.showerror("No Scents Selected", "Please select at least one scent before proceeding to checkout.")
+            return
+    
         confirmation = messagebox.askyesno("Confirm Checkout", "Are you sure you want to proceed to checkout? You will not be able to change your chosen scents")
         
         if confirmation:
@@ -369,6 +403,16 @@ class Checkout(BaseFrame):
 
         perfume_name = self.perfume_name_var.get()
 
+        #Checks if name is empty and if it is then shows message.
+        if not perfume_name.strip():
+            messagebox.showerror("Error", "Scent name cannot be empty.")
+            return
+        
+        #Replaces spaces for empty then checks if the name is alphabetical
+        if not perfume_name.replace(" ", "").isalpha():
+            messagebox.showerror("Error", "Scent name can only contain alphabetic characters and spaces.")
+            return
+        
         # Checks if characters are less than 24
         if len(perfume_name) > 24:
             messagebox.showerror("Error", "Scent name cannot exceed 24 characters.")
